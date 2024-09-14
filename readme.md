@@ -1,6 +1,6 @@
 # Three Template
 
-Easy start for new projects
+Easy Start for new projects
 
 ## Setup
 Download [Node.js](https://nodejs.org/en/download/).
