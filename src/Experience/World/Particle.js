@@ -3,8 +3,10 @@ import Experience from '../Experience.js'
 
 export default class Particle
 {
-    constructor()
+    constructor(x, y)
     {
+        this.x = x
+        this.y = y
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
@@ -27,20 +29,27 @@ export default class Particle
     createGeometry()
     {
         // Create Sphere Geometry
-        this.geometry = new THREE.SphereGeometry(0.1, 32, 32);
+        this.geometry = new THREE.BoxGeometry(1, 1);
         
-        // Create reflective phong material
-        this.material = new THREE.MeshPhongMaterial({
-            color: 0x0000ff,
-            shininess: 100,
-            envMap: this.resources.items.envMapTexture,
-            reflectivity: 1,
-            refractionRatio: 0.98,
-            flatShading: true
-        });
+        // Create reflective material
+        this.material = new THREE.MeshStandardMaterial({
+            color: 0xff00ff,
+            envMapIntensity: 1,
+            roughness: 0.2,
+            metalness: 0.8
+        })
 
         // Create Mesh
         this.model = new THREE.Mesh(this.geometry, this.material)
+
+        // Set Position
+        this.model.position.set(this.x, this.y, 0)
+
+        // Set Shadows
+        // this.model.castShadow = true
+        // this.model.receiveShadow = true
+
+        // Add to Scene
         this.scene.add(this.model)
 
         this.model.traverse((child) =>
@@ -65,6 +74,8 @@ export default class Particle
 
     update()
     {
-
+        // Ossilate using deltaTime
+        this.model.position.z = 
+            Math.sin(this.time.elapsed * (Math.abs(this.y ^ this.x)) * 0.0003) * 0.5;
     }
 }

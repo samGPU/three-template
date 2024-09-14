@@ -29,15 +29,18 @@ export default class Experience
         // Options
         this.canvas = _canvas
 
+        const particlesWidth = 9
+        const particlesHeight = 16
+
         // Setup
         this.debug = new Debug()
         this.sizes = new Sizes()
         this.time = new Time()
         this.scene = new THREE.Scene()
         this.resources = new Resources(sources)
-        this.camera = new Camera()
+        this.camera = new Camera(particlesWidth, particlesHeight)
         this.renderer = new Renderer()
-        this.world = new World()
+        this.world = new World(particlesWidth, particlesHeight)
 
         // Resize event
         this.sizes.on('resize', () =>
