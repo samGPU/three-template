@@ -1,4 +1,4 @@
-let instance = null
+let instance = null;
 
 export default class State {
 
@@ -10,15 +10,15 @@ export default class State {
         EXPERIENCE_END: 'END',
         SECTION_END: 'SECTION_END',
         SECTION_START: 'SECTION_START',
-    }
+    };
 
     constructor(STARTING_STATE = null) {
         // Singleton
         if (instance) {
-            return instance
+            return instance;
         }
-        instance = this
-        window.state = this
+        instance = this;
+        window.state = this;
 
         this.setState(STARTING_STATE);
     }

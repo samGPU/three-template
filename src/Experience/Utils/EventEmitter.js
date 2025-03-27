@@ -1,22 +1,17 @@
-export default class EventEmitter
-{
-    constructor()
-    {
+export default class EventEmitter {
+    constructor() {
         this.callbacks = {}
         this.callbacks.base = {}
     }
 
-    on(_names, callback)
-    {
+    on(_names, callback) {
         // Errors
-        if(typeof _names === 'undefined' || _names === '')
-        {
+        if(typeof _names === 'undefined' || _names === ''){
             console.warn('wrong names')
             return false
         }
 
-        if(typeof callback === 'undefined')
-        {
+        if(typeof callback === 'undefined') {
             console.warn('wrong callback')
             return false
         }
@@ -25,8 +20,7 @@ export default class EventEmitter
         const names = this.resolveNames(_names)
 
         // Each name
-        names.forEach((_name) =>
-        {
+        names.forEach((_name) => {
             // Resolve name
             const name = this.resolveName(_name)
 
@@ -45,11 +39,9 @@ export default class EventEmitter
         return this
     }
 
-    off(_names)
-    {
+    off(_names) {
         // Errors
-        if(typeof _names === 'undefined' || _names === '')
-        {
+        if(typeof _names === 'undefined' || _names === '') {
             console.warn('wrong name')
             return false
         }
@@ -58,28 +50,19 @@ export default class EventEmitter
         const names = this.resolveNames(_names)
 
         // Each name
-        names.forEach((_name) =>
-        {
+        names.forEach((_name) => {
             // Resolve name
             const name = this.resolveName(_name)
 
             // Remove namespace
-            if(name.namespace !== 'base' && name.value === '')
-            {
+            if(name.namespace !== 'base' && name.value === '') {
                 delete this.callbacks[ name.namespace ]
-            }
-
-            // Remove specific callback in namespace
-            else
-            {
+            } else {
                 // Default
-                if(name.namespace === 'base')
-                {
+                if(name.namespace === 'base') {
                     // Try to remove from each namespace
-                    for(const namespace in this.callbacks)
-                    {
-                        if(this.callbacks[ namespace ] instanceof Object && this.callbacks[ namespace ][ name.value ] instanceof Array)
-                        {
+                    for(const namespace in this.callbacks) {
+                        if(this.callbacks[ namespace ] instanceof Object && this.callbacks[ namespace ][ name.value ] instanceof Array) {
                             delete this.callbacks[ namespace ][ name.value ]
 
                             // Remove namespace if empty
@@ -87,11 +70,7 @@ export default class EventEmitter
                                 delete this.callbacks[ namespace ]
                         }
                     }
-                }
-
-                // Specified namespace
-                else if(this.callbacks[ name.namespace ] instanceof Object && this.callbacks[ name.namespace ][ name.value ] instanceof Array)
-                {
+                } else if(this.callbacks[ name.namespace ] instanceof Object && this.callbacks[ name.namespace ][ name.value ] instanceof Array) {
                     delete this.callbacks[ name.namespace ][ name.value ]
 
                     // Remove namespace if empty
@@ -104,11 +83,9 @@ export default class EventEmitter
         return this
     }
 
-    trigger(_name, _args)
-    {
+    trigger(_name, _args) {
         // Errors
-        if(typeof _name === 'undefined' || _name === '')
-        {
+        if(typeof _name === 'undefined' || _name === '') {
             console.warn('wrong name')
             return false
         }
@@ -126,37 +103,26 @@ export default class EventEmitter
         name = this.resolveName(name[ 0 ])
 
         // Default namespace
-        if(name.namespace === 'base')
-        {
+        if(name.namespace === 'base') {
             // Try to find callback in each namespace
-            for(const namespace in this.callbacks)
-            {
-                if(this.callbacks[ namespace ] instanceof Object && this.callbacks[ namespace ][ name.value ] instanceof Array)
-                {
-                    this.callbacks[ namespace ][ name.value ].forEach(function(callback)
-                    {
+            for(const namespace in this.callbacks) {
+                if(this.callbacks[ namespace ] instanceof Object && this.callbacks[ namespace ][ name.value ] instanceof Array) {
+                    this.callbacks[ namespace ][ name.value ].forEach(function(callback) {
                         result = callback.apply(this, args)
 
-                        if(typeof finalResult === 'undefined')
-                        {
+                        if(typeof finalResult === 'undefined') {
                             finalResult = result
                         }
                     })
                 }
             }
-        }
-
-        // Specified namespace
-        else if(this.callbacks[ name.namespace ] instanceof Object)
-        {
-            if(name.value === '')
-            {
+        } else if(this.callbacks[ name.namespace ] instanceof Object) {
+            if(name.value === '') {
                 console.warn('wrong name')
                 return this
             }
 
-            this.callbacks[ name.namespace ][ name.value ].forEach(function(callback)
-            {
+            this.callbacks[ name.namespace ][ name.value ].forEach(function(callback) {
                 result = callback.apply(this, args)
 
                 if(typeof finalResult === 'undefined')
@@ -167,8 +133,7 @@ export default class EventEmitter
         return finalResult
     }
 
-    resolveNames(_names)
-    {
+    resolveNames(_names) {
         let names = _names
         names = names.replace(/[^a-zA-Z0-9 ,/.]/g, '')
         names = names.replace(/[,/]+/g, ' ')
@@ -177,8 +142,7 @@ export default class EventEmitter
         return names
     }
 
-    resolveName(name)
-    {
+    resolveName(name) {
         const newName = {}
         const parts = name.split('.')
 
@@ -187,8 +151,7 @@ export default class EventEmitter
         newName.namespace = 'base' // Base namespace
 
         // Specified namespace
-        if(parts.length > 1 && parts[ 1 ] !== '')
-        {
+        if(parts.length > 1 && parts[ 1 ] !== '') {
             newName.namespace = parts[ 1 ]
         }
 

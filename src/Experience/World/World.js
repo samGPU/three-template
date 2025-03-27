@@ -3,17 +3,14 @@ import Environment from './Environment.js'
 import Floor from './Floor.js'
 import Fox from './Fox.js'
 
-export default class World
-{
-    constructor()
-    {
+export default class World {
+    constructor() {
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
 
         // Wait for resources
-        this.resources.on('ready', () =>
-        {
+        this.resources.on('ready', () => {
             // Setup
             this.floor = new Floor()
             this.fox = new Fox()
@@ -21,8 +18,7 @@ export default class World
         })
     }
 
-    update()
-    {
+    update() {
         if(this.fox)
             this.fox.update()
     }
