@@ -61,10 +61,6 @@ export default class Experience {
         this.state.on('newGameSelected', () => {
             this.newGameSelected();
         });
-
-        this.state.on('exitSelected', () => {
-            this.exitSelected();
-        });
     }
 
     continueSelected() {
@@ -76,10 +72,6 @@ export default class Experience {
     newGameSelected() {
         console.log('New game selected');
         this.state.setState('EXPERIENCE');
-    }
-
-    exitSelected() {
-        console.log('Exit selected');
     }
 
     resize() {

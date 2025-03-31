@@ -1,4 +1,5 @@
 import EventEmitter from "../../Experience/Utils/EventEmitter";
+import SoundEffect from "../../Experience/Utils/SoundEffect";
 
 export default class MenuItem extends EventEmitter {
     constructor(option, index, onSelect) {
@@ -6,6 +7,10 @@ export default class MenuItem extends EventEmitter {
         this.option = option;
         this.index = index;
         this.onSelect = onSelect;
+
+        // Create sound effect
+        this.menuChangeSound = new SoundEffect('audio/menuChange.ogg');
+        this.gameStartSound = new SoundEffect('audio/gameStart.ogg');
 
         // Create the DOM element
         this.element = document.createElement('div');
@@ -17,7 +22,6 @@ export default class MenuItem extends EventEmitter {
             if (this.option.onClick) {
                 this.option.onClick(this); // Pass the MenuItem instance
             }
-            this.onSelect(this.index);
         };
 
         // Bind click event
@@ -35,12 +39,14 @@ export default class MenuItem extends EventEmitter {
     setSelected(isSelected) {
         if (isSelected) {
             this.element.classList.add('selected');
+            this.menuChangeSound.play();
         } else {
             this.element.classList.remove('selected');
         }
     }
     
     stateChanged(eventName) {
+        this.gameStartSound.play();
         window.experience.state.trigger(eventName);
     }
 }

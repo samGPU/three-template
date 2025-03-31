@@ -19,17 +19,11 @@ export default class StartScreen {
                 } 
             },
             { 
-                text: 'New Game', 
+                text: 'Options', 
                 onClick: (menuItem) => {
-                    menuItem.stateChanged('newGameSelected');
+                    menuItem.stateChanged('optionsSelected');
                 } 
-            },
-            { 
-                text: 'Exit', 
-                onClick: (menuItem) => {
-                    menuItem.stateChanged('exitSelected');
-                }
-            },
+            }
         ];
         const menu = new Menu(menuOptions)
         container.appendChild(menu.container);
