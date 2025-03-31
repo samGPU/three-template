@@ -14,3 +14,53 @@ body {
     left: 0;
     outline: none;
 }
+
+.full-screen-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 60vw;
+    height: 100vh;
+    padding: 0 20vw;
+    z-index: 1;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: left;
+
+    .game-title {
+        text-transform: uppercase;
+        color: #ffffe4;
+        font-size: 3rem;
+        text-wrap: wrap;
+    }
+
+    .menu-container {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: left;
+        align-items: left;
+
+        .menu-item {
+            color: #ffffe4;
+            font-size: 1.5em;
+            margin: 0.5em;
+            cursor: pointer;
+        
+            &.selected {
+                color: #ff0000;
+                animation: pulse 1s infinite;
+            }
+
+            @keyframes pulse {
+                0%, 100% {
+                    font-size: 1.5em;
+                }
+                50% {
+                    font-size: 2.8em;
+                }
+            }
+        }
+    }
+}
