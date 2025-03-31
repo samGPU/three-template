@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 
-import State from './Utils/State.js';
 import Debug from './Utils/Debug.js';
 import Sizes from './Utils/Sizes.js';
 import Time from './Utils/Time.js';
@@ -8,8 +7,11 @@ import Camera from './Camera.js';
 import Renderer from './Renderer.js';
 import World from './World/World.js';
 import Resources from './Utils/Resources.js';
+import State from './Utils/State.js';
 
 import sources from './sources.js';
+
+import StartScreen from '../UI/StartScreen.js';
 
 let instance = null;
 
@@ -27,9 +29,6 @@ export default class Experience {
         // Options
         this.canvas = _canvas;
 
-        // State
-        this.state = new State();
-
         // Setup
         this.debug = new Debug();
         this.sizes = new Sizes();
@@ -40,6 +39,10 @@ export default class Experience {
         this.renderer = new Renderer();
         this.world = new World();
 
+        this.state = new State('LOADING');
+
+        this.uiController = new StartScreen();
+
         // Resize event
         this.sizes.on('resize', () => {
             this.resize();
@@ -49,6 +52,34 @@ export default class Experience {
         this.time.on('tick', () => {
             this.update();
         });
+
+        // State change event
+        this.state.on('continueSelected', () => {
+            this.continueSelected();
+        });
+
+        this.state.on('newGameSelected', () => {
+            this.newGameSelected();
+        });
+
+        this.state.on('exitSelected', () => {
+            this.exitSelected();
+        });
+    }
+
+    continueSelected() {
+        console.log('Continue selected');
+        this.state.setState('EXPERIENCE');
+        this.uiController.hide();
+    }
+
+    newGameSelected() {
+        console.log('New game selected');
+        this.state.setState('EXPERIENCE');
+    }
+
+    exitSelected() {
+        console.log('Exit selected');
     }
 
     resize() {
@@ -65,6 +96,7 @@ export default class Experience {
     destroy() {
         this.sizes.off('resize')
         this.time.off('tick')
+        this.state.off('stateChanged')
 
         // Traverse the whole scene
         this.scene.traverse((child) => {

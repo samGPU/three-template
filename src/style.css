@@ -29,6 +29,13 @@ body {
     justify-content: center;
     align-items: left;
 
+    &.hidden {
+        opacity: 0;
+        pointer-events: none;
+        cursor: default;
+        transition: opacity 1.5s;
+    }
+
     .game-title {
         text-transform: uppercase;
         color: #ffffe4;
@@ -47,6 +54,7 @@ body {
             font-size: 1.5em;
             margin: 0.5em;
             cursor: pointer;
+            user-select: none;
         
             &.selected {
                 color: #ff0000;

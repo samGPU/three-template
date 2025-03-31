@@ -1,3 +1,5 @@
+import MenuItem from './MenuItem';
+
 export default class Menu {
     constructor(options) {
         this.options = options;
@@ -9,40 +11,38 @@ export default class Menu {
 
         // Create menu items
         this.items = options.map((option, index) => {
-            const item = document.createElement('div');
-            item.classList.add('menu-item');
-            item.textContent = option.text;
-            item.onclick = option.onClick;
+            const menuItem = new MenuItem(option, index, (selectedIndex) => {
+                this.updateSelection(selectedIndex);
+            });
 
             if (index === this.currentIndex) {
-            item.classList.add('selected');
+                menuItem.setSelected(true);
             }
 
-            this.container.appendChild(item);
-            return item;
+            this.container.appendChild(menuItem.element);
+            return menuItem;
         });
 
         // Handle keyboard navigation
         document.addEventListener('keydown', (event) => {
             if (event.key === 'ArrowUp') {
-            this.updateSelection(-1);
+                this.updateSelection(this.currentIndex - 1);
             } else if (event.key === 'ArrowDown') {
-            this.updateSelection(1);
+                this.updateSelection(this.currentIndex + 1);
             } else if (event.key === 'Enter') {
-            this.items[this.currentIndex].click();
+                this.items[this.currentIndex].element.click();
             }
         });
     }
 
-    updateSelection(direction) {
-        // Remove selected class from current item
-        this.items[this.currentIndex].classList.remove('selected');
+    updateSelection(newIndex) {
+        // Normalize index
+        const normalizedIndex =
+            (newIndex + this.items.length) % this.items.length;
 
-        // Update index
-        this.currentIndex =
-            (this.currentIndex + direction + this.items.length) % this.items.length;
-
-        // Add selected class to new item
-        this.items[this.currentIndex].classList.add('selected');
+        // Update selection
+        this.items[this.currentIndex].setSelected(false);
+        this.items[normalizedIndex].setSelected(true);
+        this.currentIndex = normalizedIndex;
     }
 }

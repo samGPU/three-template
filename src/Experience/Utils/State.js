@@ -1,6 +1,6 @@
-let instance = null;
+import EventEmitter from "./EventEmitter";
 
-export default class State {
+export default class State extends EventEmitter {
 
     static STATES = {
         LOADING: 'LOADING',
@@ -13,12 +13,7 @@ export default class State {
     };
 
     constructor(STARTING_STATE = null) {
-        // Singleton
-        if (instance) {
-            return instance;
-        }
-        instance = this;
-        window.state = this;
+        super();
 
         this.setState(STARTING_STATE);
     }
@@ -34,5 +29,9 @@ export default class State {
 
     getState() {
         return this.state;
+    }
+
+    logEvent(eventName, data) {
+        console.log(`Event: ${eventName}, Data: ${data}`);
     }
 }

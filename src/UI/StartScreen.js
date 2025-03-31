@@ -12,11 +12,30 @@ export default class StartScreen {
         container.appendChild(title);
 
         const menuOptions = [
-            { text: "Continue", onClick: "" },
-            { text: "New Game", onClick: "" },
-            { text: "Exit", onClick: "" },
-        ]
+            { 
+                text: 'Continue', 
+                onClick: (menuItem) => {
+                    menuItem.stateChanged('continueSelected');
+                } 
+            },
+            { 
+                text: 'New Game', 
+                onClick: (menuItem) => {
+                    menuItem.stateChanged('newGameSelected');
+                } 
+            },
+            { 
+                text: 'Exit', 
+                onClick: (menuItem) => {
+                    menuItem.stateChanged('exitSelected');
+                }
+            },
+        ];
         const menu = new Menu(menuOptions)
         container.appendChild(menu.container);
+    }
+
+    hide() {
+        document.querySelector('.full-screen-menu').classList.add('hidden');
     }
 }
