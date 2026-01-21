@@ -9,6 +9,8 @@ import World from './World/World.js';
 import Resources from './Utils/Resources.js';
 import State from './Utils/State.js';
 
+import UserInput from './Utils/UserInput.js';
+
 import sources from './sources.js';
 
 import StartScreen from '../UI/StartScreen.js';
@@ -39,6 +41,13 @@ export default class Experience {
         this.renderer = new Renderer();
         this.world = new World();
 
+        // User input handler (wait for fox to be ready)
+        this.userInput = null;
+        this.resources.on('ready', () => {
+            // World.fox is created after resources are ready
+            this.userInput = new UserInput(this.world);
+        });
+
         this.state = new State('LOADING');
 
         this.uiController = new StartScreen();
@@ -58,20 +67,12 @@ export default class Experience {
             this.continueSelected();
         });
 
-        this.state.on('newGameSelected', () => {
-            this.newGameSelected();
-        });
     }
 
     continueSelected() {
         console.log('Continue selected');
         this.state.setState('EXPERIENCE');
         this.uiController.hide();
-    }
-
-    newGameSelected() {
-        console.log('New game selected');
-        this.state.setState('EXPERIENCE');
     }
 
     resize() {
@@ -86,9 +87,12 @@ export default class Experience {
     }
 
     destroy() {
+        if (this.userInput) {
+            this.userInput.destroy();
+        }
         this.sizes.off('resize')
         this.time.off('tick')
-        this.state.off('stateChanged')
+        this.state.off('continueSelected')
 
         // Traverse the whole scene
         this.scene.traverse((child) => {

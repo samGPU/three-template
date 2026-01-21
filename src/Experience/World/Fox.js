@@ -64,20 +64,60 @@ export default class Fox {
         // Debug
         if(this.debug.active) {
             const debugObject = {
-                playIdle: () => { 
-                    this.animation.play('idle') 
+                playIdle: () => {
+                    this.transitionTo('idle')
                 },
-                playWalking: () => { 
-                    this.animation.play('walking') 
+                playWalking: () => {
+                    this.transitionTo('walking')
                 },
-                playRunning: () => { 
-                    this.animation.play('running') 
+                playRunning: () => {
+                    this.transitionTo('running')
                 }
             }
             this.debugFolder.add(debugObject, 'playIdle')
             this.debugFolder.add(debugObject, 'playWalking')
             this.debugFolder.add(debugObject, 'playRunning')
         }
+    }
+
+    transitionTo(name, fadeDuration = 1) {
+        if(
+            !this.animation ||
+            !this.animation.actions ||
+            !this.animation.actions[name] ||
+            !this.animation.actions.current
+        ) {
+            return
+        }
+
+        const newAction = this.animation.actions[name]
+        const oldAction = this.animation.actions.current
+
+        if(newAction === oldAction) {
+            return
+        }
+
+        newAction.reset()
+        newAction.play()
+        newAction.crossFadeFrom(oldAction, fadeDuration, false)
+
+        this.animation.actions.current = newAction
+    }
+
+    playIdle() {
+        this.transitionTo('idle')
+    }
+
+    playWalking() {
+        this.transitionTo('walking')
+    }
+
+    playRunning() {
+        this.transitionTo('running')
+    }
+
+    stopAnimations() {
+        this.transitionTo('idle', 0.35)
     }
 
     update() {
